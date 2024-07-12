@@ -1,0 +1,44 @@
+---
+- hosts: localhost
+  connection: local
+  become: true
+  vars:
+    users:
+      - jmanzur
+      - root
+  pre_tasks:
+  - name: Update and Upgrade
+    apt:
+      update_cache: yes
+      upgrade: 'yes'
+
+  tasks:
+  - name: Install packages
+    package:
+      name:
+        - gnupg
+        - software-properties-common
+        - htop
+        - vim
+        - curl
+        - net-tools
+        - sshpass
+        - dos2unix
+        - telnet
+        - whois
+        - tree
+        - neofetch
+        - jq
+        - pass
+        - gnupg2
+        - silversearcher-ag
+        - zsh
+        - flatpak
+        - gnome-software-plugin-flatpak
+
+  - name: Add jmanzur to the sudoers file
+    blockinfile:
+      path: /etc/sudoers
+      insertafter: 'root  ALL=(ALL:ALL) ALL'
+      block: |
+        jmanzur  ALL=(ALL:ALL) ALL
