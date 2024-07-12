@@ -42,3 +42,56 @@
       insertafter: 'root  ALL=(ALL:ALL) ALL'
       block: |
         jmanzur  ALL=(ALL:ALL) ALL
+
+  - name: Add the Flathub repository
+    command: flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+
+  - name: Ensure Zsh with dependencies are installed
+    apt:
+      name: "{{ ['zsh'] + zsh_dependencies }}"
+      state: present
+      update_cache: yes
+    become: true
+
+  - name: Ensure zsh is the default shell for jmanzur
+    user:
+      name: jmanzur
+      shell: "/usr/bin/zsh"
+    become: true
+
+  - name: Download Oh My Zsh installation script
+    get_url:
+      url: https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh
+      dest: /tmp/install_ohmyzsh.sh
+
+  - name: Run Oh My Zsh installation script
+    command: sh /tmp/install_ohmyzsh.sh --unattended
+    register: ohmyzsh_result
+    failed_when: "'FAILED' in ohmyzsh_result.stderr"
+
+  - name: Ensure fonts directory exists
+    file:
+      path: /home/jmanzur/.local/share/fonts
+      state: directory
+      mode: '0755'
+
+  - name: Download JetBrains Mono Nerd Font zip file
+    get_url:
+      url: https://github.com/ryanoasis/nerd-fonts/releases/download/v3.2.1/JetBrainsMono.zip
+      dest: /home/jmanzur/.local/share/fonts/JetBrainsMono.zip
+
+  - name: Unzip JetBrains Mono Nerd Font
+    unarchive:
+      src: /home/jmanzur/.local/share/fonts/JetBrainsMono.zip
+      dest: /home/jmanzur/.local/share/fonts/
+      remote_src: yes
+
+  - name: Remove JetBrains Mono zip file
+    file:
+      path: /home/jmanzur/.local/share/fonts/JetBrainsMono.zip
+      state: absent
+
+  - name: Refresh font cache
+    command: fc-cache -fv
+    environment:
+      HOME: /home/jmanzur
