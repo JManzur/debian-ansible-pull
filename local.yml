@@ -46,13 +46,6 @@
   - name: Add the Flathub repository
     command: flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
 
-  - name: Ensure Zsh with dependencies are installed
-    apt:
-      name: "{{ ['zsh'] + zsh_dependencies }}"
-      state: present
-      update_cache: yes
-    become: true
-
   - name: Ensure zsh is the default shell for jmanzur
     user:
       name: jmanzur
