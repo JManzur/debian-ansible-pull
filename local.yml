@@ -35,6 +35,8 @@
         - zsh
         - flatpak
         - gnome-software-plugin-flatpak
+        - tmux
+        - 
 
   - name: Add jmanzur to the sudoers file
     blockinfile:
@@ -45,6 +47,9 @@
 
   - name: Add the Flathub repository
     command: flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+
+  - name: Install zoxide
+    command: curl -sSfL https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | sh
 
   - name: Ensure zsh is the default shell for jmanzur
     user:
@@ -88,3 +93,13 @@
     command: fc-cache -fv
     environment:
       HOME: /home/jmanzur
+
+  - name: Remove Firefox ESR
+    apt:
+      name: firefox-esr
+      state: absent
+  
+  - name: Install standar firefox from flatpak
+    flatpak:
+      name: org.mozilla.firefox
+      state: present
