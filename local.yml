@@ -36,7 +36,6 @@
         - flatpak
         - gnome-software-plugin-flatpak
         - tmux
-        - 
 
   - name: Add jmanzur to the sudoers file
     blockinfile:
