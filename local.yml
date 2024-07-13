@@ -36,6 +36,8 @@
         - flatpak
         - gnome-software-plugin-flatpak
         - tmux
+        - docker
+        - docker-compose
 
   - name: Add jmanzur to the sudoers file
     blockinfile:
@@ -43,6 +45,12 @@
       insertafter: 'root  ALL=(ALL:ALL) ALL'
       block: |
         jmanzur  ALL=(ALL:ALL) ALL
+
+  - name: Add user to the Docker group.
+    user:
+      name: jmanzur
+      groups: docker
+      append: yes
 
   - name: Add the Flathub repository
     command: flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
@@ -90,4 +98,19 @@
   - name: Install Zoom
     flatpak:
       name: us.zoom.Zoom
+      state: present
+
+  - name: Install VLC
+    flatpak:
+      name: org.videolan.VLC
+      state: present
+
+  - name: Install OBS Studio
+    flatpak:
+      name: com.obsproject.Studio
+      state: present
+
+  - name: Install Obsidian
+    flatpak:
+      name: md.obsidian.Obsidian
       state: present
