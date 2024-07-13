@@ -66,3 +66,28 @@
     flatpak:
       name: org.mozilla.firefox
       state: present
+
+  - name: Install Google Chrome
+    flatpak:
+      name: com.google.Chrome
+      state: present
+
+  - name: Install Visual Studio Code
+    flatpak:
+      name: com.visualstudio.code
+      state: present
+
+  - name: Install Spotify
+    flatpak:
+      name: com.spotify.Client
+      state: present
+
+  - name: Install Slack
+    flatpak:
+      name: com.slack.Slack
+      state: present
+
+  - name: Install Zoom
+    flatpak:
+      name: us.zoom.Zoom
+      state: present
