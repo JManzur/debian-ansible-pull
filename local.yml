@@ -38,6 +38,7 @@
         - tmux
         - docker
         - docker-compose
+        - fzf
 
   - name: Add jmanzur to the sudoers file
     blockinfile:
