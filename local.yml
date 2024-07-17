@@ -119,3 +119,37 @@
     flatpak:
       name: com.jgraph.drawio.desktop
       state: present
+
+  - name: Install KeePassXC
+    flatpak:
+      name: org.keepassxc.KeePassXC
+      state: present
+
+  - name: Import the Ulauncher GPG key
+    command: gpg --keyserver keyserver.ubuntu.com --recv 0xfaf1020699503176
+    args:
+      creates: /root/.gnupg/pubring.kbx
+
+  - name: Export the Ulauncher GPG key to a file
+    command: gpg --export 0xfaf1020699503176
+    register: gpg_key
+
+  - name: Save the Ulauncher GPG key to the keyring
+    copy:
+      content: "{{ gpg_key.stdout }}"
+      dest: /usr/share/keyrings/ulauncher-archive-keyring.gpg
+
+  - name: Add Ulauncher repository to sources list
+    copy:
+      dest: /etc/apt/sources.list.d/ulauncher-jammy.list
+      content: |
+        deb [signed-by=/usr/share/keyrings/ulauncher-archive-keyring.gpg] http://ppa.launchpad.net/agornostal/ulauncher/ubuntu jammy main
+
+  - name: Update apt package index after adding repository
+    apt:
+      update_cache: yes
+
+  - name: Install ulauncher
+    apt:
+      name: ulauncher
+      state: present
