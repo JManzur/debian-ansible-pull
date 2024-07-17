@@ -114,3 +114,8 @@
     flatpak:
       name: md.obsidian.Obsidian
       state: present
+
+  - name: Install draw.io
+    flatpak:
+      name: io.drawio.desktop
+      state: present
